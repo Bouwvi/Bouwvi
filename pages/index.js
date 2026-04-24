@@ -82,11 +82,30 @@ function Txt({ t, ac=BL }) {
 }
 
 async function ai(prompt, ctx='') {
-  try {
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:'Je bent Bouwvi, een Nederlandse bouwadviseur. '+ctx+' Geef praktisch advies in helder Nederlands. Gebruik **vet** voor kopjes en - voor lijstjes. Max 200 woorden.',messages:[{role:'user',content:prompt}]})})
-    const d=await r.json()
-    return d.content?.[0]?.text||'Er ging iets mis.'
-  } catch { return 'Verbindingsfout.' }
+  // Slimme mock responses voor demo — werkt zonder API key
+  await new Promise(r=>setTimeout(r,1200))
+  const p=prompt.toLowerCase()
+
+  if(p.includes('draagmuur')||p.includes('muur weghalen')) return `**Draagmuur weghalen — wat je moet weten**\n\nEen draagmuur is een muur die het gewicht van de vloer of het dak draagt. Voordat je hem weghaalt, moet je dit weten:\n\n- **Altijd een constructeur inschakelen** — dit is verplicht en gevaarlijk om zelf te bepalen\n- Herkenning: staat de muur haaks op de balken van de vloer? Dan is hij waarschijnlijk dragend\n- Bij een houten vloer: kijk in de kruipruimte of kelder welke kant de balken op liggen\n- **Kosten constructeur**: €300 - €800 voor berekening en tekening\n- **Stalen balk plaatsen**: €2.000 - €5.000 afhankelijk van de overspanning\n- Vergunning nodig als de constructie wijzigt\n\n⚠️ Doe dit nooit zonder professioneel advies — instortingsgevaar!`
+
+  if(p.includes('badkamer')||p.includes('douche')||p.includes('toilet')||p.includes('sanitair')) return `**Badkamer renovatie — complete aanpak**\n\n**Volgorde werkzaamheden:**\n- 1. Sloopwerk (tegels, sanitair verwijderen)\n- 2. Loodgieter: nieuwe leidingen\n- 3. Elektricien: verlichting, vloerverwarming\n- 4. Tegelwerk vloer en wanden\n- 5. Sanitair plaatsen (douche, toilet, wastafel)\n- 6. Afwerking en kit\n\n**Kostenindicatie:**\n- Budget: €6.000 - €9.000\n- Gemiddeld: €9.000 - €15.000\n- Premium: €15.000 - €25.000+\n\n**Tijdsduur**: 2-4 weken\n\n**Tip**: Plan loodgieter en elektricien vroeg — zij bepalen de planning!`
+
+  if(p.includes('keuken')) return `**Keuken renovatie — waar op te letten**\n\n**Belangrijke aandachtspunten:**\n- Gasleiding verleggen: altijd erkend installateur\n- Elektra: eigen groep voor keukenapparatuur verplicht\n- Afzuiging: ventilatie naar buiten is het meest effectief\n\n**Volgorde:**\n- 1. Sloopwerk oude keuken\n- 2. Leidingwerk aanpassen\n- 3. Elektra aanleggen\n- 4. Keuken plaatsen\n- 5. Tegelwerk / vloer\n- 6. Afwerking\n\n**Kostenindicatie:**\n- Budget: €5.000 - €10.000\n- Gemiddeld: €10.000 - €20.000\n- Premium: €20.000 - €40.000+`
+
+  if(p.includes('vergunning')) return `**Vergunningen — wanneer nodig?**\n\nJe hebt een **omgevingsvergunning** nodig bij:\n- Uitbouw of aanbouw groter dan 4m²\n- Dakkapel aan voorzijde\n- Gevel aanpassen aan straatzijde\n- Constructieve wijzigingen\n\n**Vergunningsvrij** mag je:\n- Dakkapel aan achterzijde (max. bepaalde afmetingen)\n- Kleine aanbouw aan achterzijde\n- Interne verbouwingen\n\n**Aanvragen**: via omgevingsloket.nl\n**Doorlooptijd**: 8 weken regulier, 6 maanden uitgebreid\n**Kosten**: €200 - €500 leges`
+
+  if(p.includes('kosten')||p.includes('prijs')||p.includes('budget')||p.includes('euro')) return `**Kostenindicatie verbouwing**\n\n**Vuistregels per categorie:**\n- Badkamer renovatie: €8.000 - €20.000\n- Keuken renovatie: €8.000 - €35.000\n- Uitbouw 20m²: €40.000 - €80.000\n- Dakkapel: €10.000 - €18.000\n- Nieuwe vloer (per m²): €30 - €120\n- Stucwerk (per m²): €15 - €35\n- Schilderwerk binnen: €15 - €30/m²\n\n**Altijd meenemen in budget:**\n- 10-15% onvoorzien\n- Architect/constructeur indien nodig\n- Vergunningskosten\n- BTW (21%)`
+
+  if(p.includes('isolatie')||p.includes('spouwmuur')||p.includes('dakisolatie')) return `**Isolatie — beste investeringen**\n\n**Meest rendabele maatregelen:**\n- Spouwmuurisolatie: €1.500 - €3.000 (terugverdientijd 3-5 jaar)\n- Dakisolatie: €2.000 - €6.000 (terugverdientijd 5-8 jaar)\n- HR++ glas: €300 - €600 per raam\n- Vloerisolatie: €20 - €40/m²\n\n**Subsidie aanvragen:**\n- ISDE subsidie via RVO.nl\n- Tot €4.000 terug per maatregel\n- Warmtefonds voor lening zonder rente\n\n**Tip**: Combineer maatregelen voor hogere subsidie!`
+
+  if(p.includes('laminaat')||p.includes('vloer')||p.includes('pvc')||p.includes('parket')) return `**Vloer leggen — wat je moet weten**\n\n**Volgorde:**\n- 1. Oude vloer verwijderen (indien nodig)\n- 2. Ondervloer egaliseren (max. 3mm verschil per 2m)\n- 3. Dampscherm leggen indien nodig\n- 4. Ondervloer plaatsen\n- 5. Laminaat/PVC leggen\n- 6. Plinten plaatsen\n\n**Prijzen per m²:**\n- PVC click: €15 - €40/m²\n- Laminaat: €10 - €35/m²\n- Parket: €40 - €120/m²\n\n**Zelf doen?** Laminaat en PVC zijn goed zelf te doen. Parket liever door een specialist.`
+
+  if(p.includes('planning')||p.includes('volgorde')||p.includes('wanneer')) return `**Slimme verbouwplanning**\n\n**Altijd deze volgorde aanhouden:**\n- 1. Ontwerp & vergunningen regelen\n- 2. Aannemer/specialisten plannen (doe dit vroeg!)\n- 3. Sloopwerk\n- 4. Constructiewerk (muren, vloeren)\n- 5. Ruwbouw installaties (loodgieter, elektra)\n- 6. Isolatie en gipswerk\n- 7. Afbouw (tegelwerk, vloeren)\n- 8. Schilderwerk\n- 9. Sanitair en keuken plaatsen\n- 10. Afwerking en schoonmaak\n\n**Tip**: Plan altijd 20% extra tijd — verbouwingen lopen altijd uit!`
+
+  if(p.includes('asbest')) return `**Asbest — veiligheid voorop**\n\n⚠️ **Woningen gebouwd vóór 1994 kunnen asbest bevatten!**\n\n**Waar asbest voorkomt:**\n- Golfplaten in schuren\n- Vloerbedekking (vinyl tegels)\n- Dakleien\n- Brandwerende platen in meterkast\n- Buizen en leidingen\n\n**Wat je NOOIT zelf mag doen:**\n- Asbest verwijderen of bewerken\n- Boren in materialen die asbest kunnen bevatten\n\n**Wat je moet doen:**\n- Inventarisatie laten uitvoeren (gecertificeerd bedrijf)\n- Kosten: €200 - €600\n- Verwijdering door gecertificeerd asbestverwijderaar\n- Kosten verwijdering: €50 - €150/m²`
+
+  // Generiek antwoord voor andere vragen
+  return `**Bouwvi advies**\n\nOp basis van jouw vraag over "${prompt.slice(0,50)}...":\n\n**Algemene aandachtspunten:**\n- Vraag altijd minimaal 3 offertes aan bij erkende aannemers\n- Controleer certificeringen (VCA, erkend installateur)\n- Leg alles schriftelijk vast in een overeenkomst\n- Houd rekening met 10-15% onvoorziene kosten\n- Vraag na of er een vergunning nodig is\n\n**Zelf doen of uitbesteden?**\n- Constructie, elektra en gaswerk: altijd professional\n- Tegelwerk, schilderwerk, vloeren: goed zelf te doen\n- Loodgieterwerk: deels zelf mogelijk\n\nStel een specifiekere vraag voor gedetailleerd advies!`
 }
 
 const CATS=[
