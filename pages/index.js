@@ -57,17 +57,17 @@ const Icon = ({ name, size=16, color='currentColor', strokeWidth=1.5, style={} }
 
 // ─── KLEUREN ──────────────────────────────────────────────────────────────────
 const C = {
-  navy:'#0B1F4B', blue:'#1A4599', blueHover:'#153A80',
-  blueSoft:'#EBF0FB', blueL:'#C8D6F5',
-  red:'#D93025', redSoft:'#FCEAEA',
-  white:'#FFFFFF', off:'#F7F8FC', sand:'#F0F2F8',
-  ink:'#0D1117', slate:'#374151', mist:'#6B7280', light:'#9CA3AF',
-  border:'#E2E6EF', borderDark:'#C5CDE0',
-  ok:'#16A34A', okSoft:'#DCFCE7',
-  gold:'#D97706', goldSoft:'#FEF3C7',
-  shadow: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
-  shadowMd: '0 4px 6px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04)',
-  shadowLg: '0 10px 25px rgba(11,31,75,0.1), 0 4px 10px rgba(11,31,75,0.06)',
+  navy:'#0F2D6B', blue:'#1A4599', blueHover:'#153A80',
+  blueSoft:'#E8EFFE', blueL:'#D0DCFA',
+  red:'#E8304A', redD:'#C01F35', redSoft:'#FDEAED',
+  white:'#FFFFFF', off:'#F5F7FF', sand:'#EEF1FA',
+  ink:'#0A0F1E', slate:'#3A4A6B', mist:'#7A8FB5', light:'#A0AFCC',
+  border:'#D8E0F5', borderDark:'#C0CEEA',
+  ok:'#1E8449', okSoft:'#E8F5E9',
+  gold:'#F59E0B', goldSoft:'#FEF3C7',
+  shadow: '0 2px 8px rgba(15,45,107,0.08), 0 1px 3px rgba(15,45,107,0.04)',
+  shadowMd: '0 6px 20px rgba(15,45,107,0.12), 0 2px 8px rgba(15,45,107,0.07)',
+  shadowLg: '0 16px 40px rgba(15,45,107,0.16), 0 6px 16px rgba(15,45,107,0.09)',
 }
 
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
@@ -127,14 +127,14 @@ const CSS = `
   input, textarea, button, select { font-family: inherit; }
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: ${C.borderDark}; border-radius: 4px; }
-  .nav-link { transition: color .15s, background .15s; }
-  .nav-link:hover { background: ${C.blueSoft}; color: ${C.blue}; }
-  .nav-link.active { background: ${C.blueSoft}; color: ${C.blue}; font-weight: 600; }
+  ::-webkit-scrollbar-thumb { background: ${C.blueL}; border-radius: 4px; }
+  .nav-link { transition: color .15s, background .15s; color: rgba(255,255,255,0.75); }
+  .nav-link:hover { background: rgba(255,255,255,0.12); color: ${C.white}; }
+  .nav-link.active { background: rgba(255,255,255,0.15); color: ${C.white}; font-weight: 600; }
   .card-hover { transition: box-shadow .2s, transform .2s, border-color .2s; }
-  .card-hover:hover { box-shadow: ${C.shadowMd}; transform: translateY(-1px); border-color: ${C.blueL} !important; }
+  .card-hover:hover { box-shadow: ${C.shadowMd}; transform: translateY(-2px); border-color: ${C.blueL} !important; }
   .btn-primary { transition: background .15s, opacity .15s; }
-  .btn-primary:hover { opacity: .9; }
+  .btn-primary:hover { opacity: .88; }
   .btn-ghost { transition: background .15s, color .15s; }
   .btn-ghost:hover { background: ${C.sand}; }
 `
@@ -164,11 +164,12 @@ function Btn({ children, onClick, variant='primary', disabled, full, size='md', 
   const sizes = { sm:'7px 12px', md:'9px 16px', lg:'11px 20px' }
   const fontSizes = { sm:12, md:13.5, lg:15 }
   const variants = {
-    primary:{ bg:C.blue, c:C.white, border:`1px solid ${C.blue}` },
+    primary:{ bg:C.red, c:C.white, border:`1px solid ${C.red}` },
     secondary:{ bg:C.white, c:C.slate, border:`1px solid ${C.border}` },
     danger:{ bg:C.red, c:C.white, border:`1px solid ${C.red}` },
     ghost:{ bg:'transparent', c:C.slate, border:'1px solid transparent' },
     navy:{ bg:C.navy, c:C.white, border:`1px solid ${C.navy}` },
+    blue:{ bg:C.blue, c:C.white, border:`1px solid ${C.blue}` },
   }
   const v = variants[variant] || variants.primary
   return (
@@ -240,14 +241,14 @@ function Nav({ user, tab, setTab, projecten, onNieuwProject, onLogout }) {
   }, [])
 
   return (
-    <nav style={{ background:C.white, borderBottom:`1px solid ${C.border}`, position:'sticky', top:0, zIndex:300, boxShadow:C.shadow }}>
+    <nav style={{ background:C.navy, borderBottom:`3px solid ${C.red}`, position:'sticky', top:0, zIndex:300, boxShadow:'0 2px 12px rgba(15,45,107,0.25)' }}>
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'0 24px', display:'flex', alignItems:'center', height:56, gap:8 }}>
         {/* Logo */}
         <button onClick={() => setTab('home')} style={{ background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:9, padding:'0 4px 0 0', marginRight:16, flexShrink:0 }}>
           <div style={{ width:30, height:30, background:C.navy, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center' }}>
             <span style={{ color:C.white, fontWeight:800, fontSize:16, letterSpacing:'-1px', fontFamily:'Georgia, serif' }}>B</span>
           </div>
-          <span style={{ fontWeight:700, fontSize:15.5, color:C.navy, letterSpacing:'-.3px' }}>bouwvi</span>
+          <span style={{ fontWeight:700, fontSize:15.5, color:C.white, letterSpacing:'-.3px' }}>bouwvi</span>
         </button>
 
         {/* Nav links */}
@@ -255,8 +256,8 @@ function Nav({ user, tab, setTab, projecten, onNieuwProject, onLogout }) {
           {navLinks.map(link => (
             <button key={link.id} onClick={() => setTab(link.id)}
               className={`nav-link ${tab === link.id ? 'active' : ''}`}
-              style={{ display:'flex', alignItems:'center', gap:7, padding:'6px 12px', borderRadius:7, border:'none', background:'none', fontSize:13.5, color:tab===link.id?C.blue:C.slate, cursor:'pointer', whiteSpace:'nowrap', fontWeight:tab===link.id?600:400 }}>
-              <Icon name={link.icon} size={15} color={tab===link.id?C.blue:C.mist}/>
+              style={{ display:'flex', alignItems:'center', gap:7, padding:'6px 12px', borderRadius:7, border:'none', background:'none', fontSize:13.5, color:tab===link.id?C.white:'rgba(255,255,255,0.72)', cursor:'pointer', whiteSpace:'nowrap', fontWeight:tab===link.id?600:400 }}>
+              <Icon name={link.icon} size={15} color={tab===link.id?C.white:'rgba(255,255,255,0.55)'}/>
               {link.label}
             </button>
           ))}
@@ -265,7 +266,7 @@ function Nav({ user, tab, setTab, projecten, onNieuwProject, onLogout }) {
         {/* Rechts: nieuw project + account */}
         <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
           {isPremium && (
-            <Btn onClick={onNieuwProject} disabled={!kanNieuwProject} variant="primary" size="sm" style={{ gap:5 }}>
+            <Btn onClick={onNieuwProject} disabled={!kanNieuwProject} variant="primary" size="sm" style={{ gap:5, background:C.red, borderColor:C.red }}>
               <Icon name="plus" size={14} color={C.white}/>
               Nieuw project
             </Btn>
@@ -348,7 +349,7 @@ function Home({ user, setTab, projecten, onNieuwProject }) {
     <div style={{ maxWidth:1000, margin:'0 auto', padding:'36px 24px 60px', animation:'fadeIn .3s ease' }}>
       <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:28, flexWrap:'wrap', gap:12 }}>
         <div>
-          <h1 style={{ fontWeight:700, fontSize:24, color:C.navy, margin:'0 0 4px', letterSpacing:'-.3px' }}>Welkom, {user.naam.split(' ')[0]}</h1>
+          <h1 style={{ fontWeight:800, fontSize:26, color:C.navy, margin:'0 0 4px', letterSpacing:'-.4px' }}>Welkom, {user.naam.split(' ')[0]}</h1>
           <p style={{ fontSize:14, color:C.mist, margin:0 }}>
             {actief.length === 0 ? 'Nog geen actieve projecten. Start je eerste project.' : `${actief.length} actief project${actief.length !== 1 ? 'en' : ''} — ${limiet - actief.length} slot${limiet - actief.length !== 1 ? 's' : ''} beschikbaar`}
           </p>
@@ -399,13 +400,13 @@ function Home({ user, setTab, projecten, onNieuwProject }) {
   // Gratis user
   return (
     <div style={{ maxWidth:900, margin:'0 auto', padding:'40px 24px 60px', animation:'fadeIn .3s ease' }}>
-      <div style={{ background:C.navy, borderRadius:14, padding:'28px 28px', marginBottom:24, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:16 }}>
+      <div style={{ background:`linear-gradient(135deg, ${C.navy} 0%, #1A3D8A 100%)`, borderRadius:14, padding:'28px 28px', marginBottom:24, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:16, boxShadow:'0 8px 32px rgba(15,45,107,0.2)' }}>
         <div>
           <p style={{ color:'rgba(255,255,255,.6)', fontSize:12, fontWeight:600, margin:'0 0 6px', textTransform:'uppercase', letterSpacing:.7 }}>Gratis account</p>
           <h2 style={{ fontWeight:700, fontSize:20, color:C.white, margin:'0 0 8px', letterSpacing:'-.2px' }}>Goedendag, {user.naam.split(' ')[0]}</h2>
           <p style={{ fontSize:13.5, color:'rgba(255,255,255,.65)', margin:0 }}>Je hebt toegang tot de kennisbibliotheek en vakmannen. Upgrade voor projecten met AI-begeleiding.</p>
         </div>
-        <Btn onClick={() => setTab('upgrade')} variant="secondary" size="md" style={{ gap:7, background:'rgba(255,255,255,.12)', border:'1px solid rgba(255,255,255,.2)', color:C.white }}>
+        <Btn onClick={() => setTab('upgrade')} variant="secondary" size="md" style={{ gap:7, background:C.red, border:`1px solid ${C.red}`, color:C.white }}>
           <Icon name="star" size={14} color={C.white}/> Upgraden naar Premium
         </Btn>
       </div>
@@ -445,11 +446,11 @@ function ProjectKaart({ project: p, onClick, onEdit, onDelete, compact=false }) 
   const statusVariant = { 'In voorbereiding':'gold', 'Lopend':'ok', 'Afgerond':'default' }[p.status] || 'default'
 
   return (
-    <Card className="card-hover" style={{ padding:0, cursor:'pointer', overflow:'hidden' }} onClick={onClick}>
-      <div style={{ borderLeft:`3px solid ${statusKleur}`, padding:'18px 18px 14px' }}>
+    <Card className="card-hover" style={{ padding:0, cursor:'pointer', overflow:'hidden', borderTop:`3px solid ${statusKleur}` }} onClick={onClick}>
+      <div style={{ padding:'18px 18px 14px' }}>
         <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:8 }}>
           <div style={{ flex:1, minWidth:0 }}>
-            <div style={{ fontWeight:600, fontSize:14.5, color:C.ink, marginBottom:4 }}>{p.naam}</div>
+            <div style={{ fontWeight:700, fontSize:15.5, color:C.ink, marginBottom:5, letterSpacing:'-.2px' }}>{p.naam}</div>
             <div style={{ display:'flex', gap:8, alignItems:'center', flexWrap:'wrap' }}>
               <Badge label={p.status} variant={statusVariant}/>
               <span style={{ fontSize:12, color:C.light }}>{p.datum}</span>
@@ -661,7 +662,7 @@ function ProjectenModule({ user, projecten, setProjecten, setTab, onNieuwProject
         </div>
 
         {/* Header */}
-        <div style={{ background:C.navy, borderRadius:12, padding:'20px 22px', marginBottom:20, borderLeft:`4px solid ${statusKleur}` }}>
+        <div style={{ background:`linear-gradient(135deg, ${C.navy} 0%, #1A3D8A 100%)`, borderRadius:12, padding:'20px 22px', marginBottom:20, borderLeft:`4px solid ${statusKleur}`, boxShadow:'0 6px 24px rgba(15,45,107,0.2)' }}>
           <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
             <div style={{ flex:1, minWidth:0 }}>
               <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, flexWrap:'wrap' }}>
@@ -840,7 +841,7 @@ function ProjectenModule({ user, projecten, setProjecten, setTab, onNieuwProject
     <div style={{ maxWidth:860, margin:'0 auto', padding:'32px 24px 60px', animation:'fadeIn .3s ease' }}>
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:22, flexWrap:'wrap', gap:12 }}>
         <div>
-          <h1 style={{ fontWeight:700, fontSize:22, color:C.navy, margin:'0 0 4px', letterSpacing:'-.3px' }}>Mijn projecten</h1>
+          <h1 style={{ fontWeight:800, fontSize:24, color:C.navy, margin:'0 0 4px', letterSpacing:'-.4px' }}>Mijn projecten</h1>
           <p style={{ fontSize:13.5, color:C.mist, margin:0 }}>
             {actief.length} actief van {limiet} — {limiet - actief.length} slot{limiet - actief.length !== 1 ? 's' : ''} beschikbaar
           </p>
@@ -958,7 +959,7 @@ function Bibliotheek({ user, setTab }) {
     <div ref={topRef} style={{ maxWidth:860, margin:'0 auto', padding:'32px 24px 60px', animation:'fadeIn .3s ease' }}>
       {/* Hero */}
       <div style={{ marginBottom:28 }}>
-        <h1 style={{ fontWeight:700, fontSize:24, color:C.navy, margin:'0 0 6px', letterSpacing:'-.3px' }}>Kennisbibliotheek</h1>
+        <h1 style={{ fontWeight:800, fontSize:26, color:C.navy, margin:'0 0 6px', letterSpacing:'-.4px' }}>Kennisbibliotheek</h1>
         <p style={{ fontSize:14, color:C.mist, margin:'0 0 18px' }}>Praktische informatie over verbouwen en renoveren — altijd gratis toegankelijk.</p>
         <div style={{ display:'flex', background:C.white, border:`1px solid ${C.border}`, borderRadius:8, overflow:'hidden', boxShadow:C.shadow, maxWidth:500 }}>
           <div style={{ padding:'0 12px', display:'flex', alignItems:'center' }}>
@@ -1412,7 +1413,7 @@ function Upgrade({ user, onUpgrade }) {
   return (
     <div style={{ maxWidth:780, margin:'0 auto', padding:'48px 24px 60px', animation:'fadeIn .3s ease' }}>
       <div style={{ textAlign:'center', marginBottom:36 }}>
-        <h1 style={{ fontWeight:700, fontSize:26, color:C.navy, margin:'0 0 8px', letterSpacing:'-.4px' }}>Kies jouw plan</h1>
+        <h1 style={{ fontWeight:800, fontSize:28, color:C.navy, margin:'0 0 8px', letterSpacing:'-.5px' }}>Kies jouw plan</h1>
         <p style={{ fontSize:15, color:C.mist, margin:0 }}>Maandelijks opzegbaar · iDEAL · geen verborgen kosten</p>
       </div>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:16 }}>
@@ -1478,7 +1479,7 @@ function Login({ onLogin }) {
           <div style={{ width:40, height:40, background:C.navy, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 14px' }}>
             <span style={{ color:C.white, fontWeight:800, fontSize:20, fontFamily:'Georgia, serif' }}>B</span>
           </div>
-          <h1 style={{ fontWeight:700, fontSize:20, color:C.navy, margin:'0 0 4px' }}>Inloggen bij Bouwvi</h1>
+          <h1 style={{ fontWeight:800, fontSize:22, color:C.navy, margin:'0 0 4px', letterSpacing:'-.3px' }}>Inloggen bij Bouwvi</h1>
           <p style={{ fontSize:13, color:C.mist, margin:0 }}>Bouwadvies in je broekzak</p>
         </div>
 
@@ -1576,15 +1577,15 @@ export default function App() {
         {tab === 'upgrade' && <Upgrade user={user} onUpgrade={upgrade}/>}
       </main>
 
-      <footer style={{ background:C.white, borderTop:`1px solid ${C.border}`, padding:'18px 24px', textAlign:'center', marginTop:40 }}>
+      <footer style={{ background:C.navy, borderTop:`1px solid rgba(255,255,255,0.1)`, padding:'18px 24px', textAlign:'center', marginTop:40 }}>
         <div style={{ maxWidth:1100, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:10 }}>
           <div style={{ display:'flex', alignItems:'center', gap:9 }}>
             <div style={{ width:24, height:24, background:C.navy, borderRadius:5, display:'flex', alignItems:'center', justifyContent:'center' }}>
               <span style={{ color:C.white, fontWeight:800, fontSize:13, fontFamily:'Georgia, serif' }}>B</span>
             </div>
-            <span style={{ fontWeight:600, fontSize:13.5, color:C.navy }}>bouwvi</span>
+            <span style={{ fontWeight:600, fontSize:13.5, color:'rgba(255,255,255,0.8)' }}>bouwvi</span>
           </div>
-          <p style={{ fontSize:12, color:C.light, margin:0 }}>Demo versie · Bouwvi geeft algemeen advies · Raadpleeg altijd een professional voor constructie, elektra en loodgieterwerk</p>
+          <p style={{ fontSize:12, color:'rgba(255,255,255,0.45)', margin:0 }}>Demo versie · Bouwvi geeft algemeen advies · Raadpleeg altijd een professional voor constructie, elektra en loodgieterwerk</p>
         </div>
       </footer>
 
