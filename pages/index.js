@@ -248,7 +248,7 @@ function Nav({ user, tab, setTab, projecten, onNieuwProject, onLogout }) {
           <div style={{ width:30, height:30, background:C.blue, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center' }}>
             <span style={{ color:C.red, fontWeight:800, fontSize:16, letterSpacing:'-1px', fontFamily:'Georgia, serif' }}>B</span>
           </div>
-          <span style={{ fontWeight:700, fontSize:15.5, color:C.red, letterSpacing:'-.3px' }}>bouwvi</span>
+          <span style={{ fontWeight:700, fontSize:15.5, color:C.white, letterSpacing:'-.3px' }}>Bouwvi</span>
         </button>
 
         {/* Nav links */}
@@ -1583,7 +1583,7 @@ export default function App() {
             <div style={{ width:24, height:24, background:C.blue, borderRadius:5, display:'flex', alignItems:'center', justifyContent:'center' }}>
               <span style={{ color:C.red, fontWeight:800, fontSize:13, fontFamily:'Georgia, serif' }}>B</span>
             </div>
-            <span style={{ fontWeight:600, fontSize:13.5, color:C.red }}>bouwvi</span>
+            <span style={{ fontWeight:600, fontSize:13.5, color:'rgba(255,255,255,0.8)' }}>Bouwvi</span>
           </div>
           <p style={{ fontSize:12, color:'rgba(255,255,255,0.45)', margin:0 }}>Demo versie · Bouwvi geeft algemeen advies · Raadpleeg altijd een professional voor constructie, elektra en loodgieterwerk</p>
         </div>
