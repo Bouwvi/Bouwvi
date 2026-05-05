@@ -144,8 +144,8 @@ function Spinner({ size=18 }) {
   return <span style={{ width:size, height:size, border:`2px solid currentColor`, borderTopColor:'transparent', borderRadius:'50%', display:'inline-block', animation:'spin .7s linear infinite', flexShrink:0 }}/>
 }
 
-function Card({ children, style, className='' }) {
-  return <div className={className} style={{ background:C.white, borderRadius:10, border:`1px solid ${C.border}`, boxShadow:C.shadow, ...style }}>{children}</div>
+function Card({ children, style, className='', onClick }) {
+  return <div className={className} style={{ background:C.white, borderRadius:10, border:`1px solid ${C.border}`, boxShadow:C.shadow, ...style }} onClick={onClick}>{children}</div>
 }
 
 function Badge({ label, variant='default' }) {
