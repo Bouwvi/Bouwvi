@@ -601,6 +601,7 @@ function OverzichtTab({ project, onSave, statusKleur }) {
   const woning = ['Tussenwoning','Hoekwoning','Vrijstaande woning','2-onder-1-kapwoning','Appartement']
 
   // Laad AI samenvatting bij eerste render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     laadAnalyse(project)
   }, [project.id])
