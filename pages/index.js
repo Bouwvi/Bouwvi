@@ -245,10 +245,10 @@ function Nav({ user, tab, setTab, projecten, onNieuwProject, onLogout }) {
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'0 24px', display:'flex', alignItems:'center', height:56, gap:8 }}>
         {/* Logo */}
         <button onClick={() => setTab('home')} style={{ background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:9, padding:'0 4px 0 0', marginRight:16, flexShrink:0 }}>
-          <div style={{ width:30, height:30, background:C.navy, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <span style={{ color:C.white, fontWeight:800, fontSize:16, letterSpacing:'-1px', fontFamily:'Georgia, serif' }}>B</span>
+          <div style={{ width:30, height:30, background:C.blue, borderRadius:7, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ color:C.red, fontWeight:800, fontSize:16, letterSpacing:'-1px', fontFamily:'Georgia, serif' }}>B</span>
           </div>
-          <span style={{ fontWeight:700, fontSize:15.5, color:C.white, letterSpacing:'-.3px' }}>bouwvi</span>
+          <span style={{ fontWeight:700, fontSize:15.5, color:C.red, letterSpacing:'-.3px' }}>bouwvi</span>
         </button>
 
         {/* Nav links */}
@@ -1476,8 +1476,8 @@ function Login({ onLogin }) {
     <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:20, background:C.off }}>
       <div style={{ background:C.white, borderRadius:14, padding:'36px 32px', maxWidth:400, width:'100%', boxShadow:C.shadowLg, animation:'fadeIn .3s ease' }}>
         <div style={{ textAlign:'center', marginBottom:28 }}>
-          <div style={{ width:40, height:40, background:C.navy, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 14px' }}>
-            <span style={{ color:C.white, fontWeight:800, fontSize:20, fontFamily:'Georgia, serif' }}>B</span>
+          <div style={{ width:40, height:40, background:C.blue, borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 14px' }}>
+            <span style={{ color:C.red, fontWeight:800, fontSize:20, fontFamily:'Georgia, serif' }}>B</span>
           </div>
           <h1 style={{ fontWeight:800, fontSize:22, color:C.navy, margin:'0 0 4px', letterSpacing:'-.3px' }}>Inloggen bij Bouwvi</h1>
           <p style={{ fontSize:13, color:C.mist, margin:0 }}>Bouwadvies in je broekzak</p>
@@ -1580,10 +1580,10 @@ export default function App() {
       <footer style={{ background:C.navy, borderTop:`1px solid rgba(255,255,255,0.1)`, padding:'18px 24px', textAlign:'center', marginTop:40 }}>
         <div style={{ maxWidth:1100, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:10 }}>
           <div style={{ display:'flex', alignItems:'center', gap:9 }}>
-            <div style={{ width:24, height:24, background:C.navy, borderRadius:5, display:'flex', alignItems:'center', justifyContent:'center' }}>
-              <span style={{ color:C.white, fontWeight:800, fontSize:13, fontFamily:'Georgia, serif' }}>B</span>
+            <div style={{ width:24, height:24, background:C.blue, borderRadius:5, display:'flex', alignItems:'center', justifyContent:'center' }}>
+              <span style={{ color:C.red, fontWeight:800, fontSize:13, fontFamily:'Georgia, serif' }}>B</span>
             </div>
-            <span style={{ fontWeight:600, fontSize:13.5, color:'rgba(255,255,255,0.8)' }}>bouwvi</span>
+            <span style={{ fontWeight:600, fontSize:13.5, color:C.red }}>bouwvi</span>
           </div>
           <p style={{ fontSize:12, color:'rgba(255,255,255,0.45)', margin:0 }}>Demo versie · Bouwvi geeft algemeen advies · Raadpleeg altijd een professional voor constructie, elektra en loodgieterwerk</p>
         </div>
