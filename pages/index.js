@@ -573,14 +573,275 @@ function NieuwProjectModal({ onClose, onSave, user }) {
   )
 }
 
+
+// ─── OVERZICHT TAB ────────────────────────────────────────────────────────────
+// Volledig bewerkbaar projectoverzicht met AI samenvatting
+// Props: project, onSave(updates), statusKleur
+function OverzichtTab({ project, onSave, statusKleur }) {
+  // ── State: bewerkbaar formulier ──────────────────────────────────────────
+  const [bewerken, setBewerken] = useState(false)
+  const [form, setForm] = useState({
+    naam:        project.naam        || '',
+    omschrijving:project.omschrijving|| '',
+    budget:      project.budget      || '',
+    wens:        project.wens        || '',
+    bouwjaar:    project.bouwjaar    || '',
+    woningtype:  project.woningtype  || 'Tussenwoning',
+    status:      project.status      || 'In voorbereiding',
+    voortgang:   project.voortgang   ?? 0,
+    volgende_stap: project.volgende_stap || '',
+  })
+  const [opgeslagen, setOpgeslagen] = useState(false)
+
+  // ── State: AI samenvatting ───────────────────────────────────────────────
+  const [analyse, setAnalyse] = useState('')
+  const [loadA, setLoadA]     = useState(false)
+  const [aiError, setAiError] = useState('')
+
+  const woning = ['Tussenwoning','Hoekwoning','Vrijstaande woning','2-onder-1-kapwoning','Appartement']
+
+  // Laad AI samenvatting bij eerste render
+  useEffect(() => {
+    laadAnalyse(project)
+  }, [project.id])
+
+  function laadAnalyse(p) {
+    setLoadA(true); setAiError(''); setAnalyse('')
+    const sys = `Je bent Bouwvi AI bouwcoach. PROJECTGEGEVENS: Naam: ${p.naam}. Type: ${p.type}. Bouwjaar: ${p.bouwjaar||'onbekend'}. Woningtype: ${p.woningtype||'onbekend'}. Budget: ${p.budget||'onbekend'}. Wensen: ${p.wens||'niet ingevuld'}. Extra: ${p.extra||'geen'}. Status: ${p.status}. Voortgang: ${p.voortgang}%. Geef concreet, praktisch advies in helder Nederlands. Gebruik **vet** voor kopjes en - voor opsommingen.`
+    callAI(
+      `Geef een beknopt projectoverzicht met: **Status & voortgang** (één zin), **Top 3 aandachtspunten** voor dit type verbouwing (veiligheid, vergunningen, volgorde), **Kostenindicatie** (budget/midden/premium range voor ${p.type}), **Aanbevolen volgende stap** (concreet en uitvoerbaar). Wees specifiek voor dit project, niet generiek.`,
+      sys
+    ).then(t => {
+      if (t.startsWith('Fout:') || t.startsWith('Verbinding')) {
+        setAiError(t)
+      } else {
+        setAnalyse(t)
+      }
+      setLoadA(false)
+    })
+  }
+
+  function setField(k, v) { setForm(f => ({ ...f, [k]: v })) }
+
+  function slaOp() {
+    onSave(form)
+    setBewerken(false)
+    setOpgeslagen(true)
+    setTimeout(() => setOpgeslagen(false), 3000)
+  }
+
+  function annuleer() {
+    setForm({
+      naam:        project.naam        || '',
+      omschrijving:project.omschrijving|| '',
+      budget:      project.budget      || '',
+      wens:        project.wens        || '',
+      bouwjaar:    project.bouwjaar    || '',
+      woningtype:  project.woningtype  || 'Tussenwoning',
+      status:      project.status      || 'In voorbereiding',
+      voortgang:   project.voortgang   ?? 0,
+      volgende_stap: project.volgende_stap || '',
+    })
+    setBewerken(false)
+  }
+
+  // Invoer helpers
+  const inputSt = { width:'100%', border:`1px solid ${C.border}`, borderRadius:7, padding:'9px 12px', fontSize:14, outline:'none', background:C.white, fontFamily:'inherit' }
+  const labelSt = { display:'block', fontSize:12, fontWeight:600, color:C.slate, marginBottom:5, textTransform:'uppercase', letterSpacing:.5 }
+
+  return (
+    <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+
+      {/* ── Projectgegevens kaart ─────────────────────────────────────────── */}
+      <Card style={{ padding:'20px 22px' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+            <Icon name="clipboardList" size={16} color={C.blue}/>
+            <span style={{ fontWeight:700, fontSize:15, color:C.ink }}>Projectgegevens</span>
+          </div>
+          <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+            {opgeslagen && (
+              <div style={{ display:'flex', alignItems:'center', gap:5, fontSize:12.5, color:C.ok, animation:'fadeIn .2s ease' }}>
+                <Icon name="checkCircle" size={14} color={C.ok}/> Opgeslagen
+              </div>
+            )}
+            {!bewerken ? (
+              <Btn onClick={() => setBewerken(true)} variant="secondary" size="sm" style={{ gap:5 }}>
+                <Icon name="edit" size={13} color={C.slate}/> Bewerken
+              </Btn>
+            ) : (
+              <div style={{ display:'flex', gap:6 }}>
+                <Btn onClick={annuleer} variant="ghost" size="sm">Annuleren</Btn>
+                <Btn onClick={slaOp} variant="primary" size="sm" style={{ gap:5 }}>
+                  <Icon name="check" size={13} color={C.white}/> Opslaan
+                </Btn>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {!bewerken ? (
+          /* ── Leesmodus ── */
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px 24px' }}>
+            {[
+              ['Projectnaam',  form.naam],
+              ['Type',         project.type.charAt(0).toUpperCase()+project.type.slice(1)],
+              ['Woningtype',   form.woningtype],
+              ['Bouwjaar',     form.bouwjaar || '—'],
+              ['Budget',       form.budget   || '—'],
+              ['Status',       form.status],
+            ].map(([k, v]) => (
+              <div key={k} style={{ borderBottom:`1px solid ${C.border}`, paddingBottom:8 }}>
+                <div style={{ fontSize:11.5, color:C.mist, fontWeight:600, textTransform:'uppercase', letterSpacing:.5, marginBottom:3 }}>{k}</div>
+                <div style={{ fontSize:14, color:C.ink, fontWeight:500 }}>{v}</div>
+              </div>
+            ))}
+            <div style={{ gridColumn:'1/-1', borderBottom:`1px solid ${C.border}`, paddingBottom:8 }}>
+              <div style={{ fontSize:11.5, color:C.mist, fontWeight:600, textTransform:'uppercase', letterSpacing:.5, marginBottom:3 }}>Omschrijving</div>
+              <div style={{ fontSize:14, color:C.ink }}>{form.omschrijving || '—'}</div>
+            </div>
+            <div style={{ gridColumn:'1/-1', borderBottom:`1px solid ${C.border}`, paddingBottom:8 }}>
+              <div style={{ fontSize:11.5, color:C.mist, fontWeight:600, textTransform:'uppercase', letterSpacing:.5, marginBottom:3 }}>Wensen & doelen</div>
+              <div style={{ fontSize:14, color:C.ink, lineHeight:1.6 }}>{form.wens || '—'}</div>
+            </div>
+          </div>
+        ) : (
+          /* ── Bewerkingsmodus ── */
+          <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+              <div>
+                <label style={labelSt}>Projectnaam</label>
+                <input value={form.naam} onChange={e => setField('naam', e.target.value)} style={inputSt}
+                  onFocus={e => e.target.style.borderColor=C.blue} onBlur={e => e.target.style.borderColor=C.border}/>
+              </div>
+              <div>
+                <label style={labelSt}>Woningtype</label>
+                <select value={form.woningtype} onChange={e => setField('woningtype', e.target.value)} style={{ ...inputSt }}>
+                  {woning.map(w => <option key={w}>{w}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={labelSt}>Bouwjaar woning</label>
+                <input value={form.bouwjaar} onChange={e => setField('bouwjaar', e.target.value)} placeholder="bijv. 1987" style={inputSt}
+                  onFocus={e => e.target.style.borderColor=C.blue} onBlur={e => e.target.style.borderColor=C.border}/>
+              </div>
+              <div>
+                <label style={labelSt}>Budget indicatie</label>
+                <input value={form.budget} onChange={e => setField('budget', e.target.value)} placeholder="bijv. €8.000 – €12.000" style={inputSt}
+                  onFocus={e => e.target.style.borderColor=C.blue} onBlur={e => e.target.style.borderColor=C.border}/>
+              </div>
+            </div>
+            <div>
+              <label style={labelSt}>Omschrijving</label>
+              <input value={form.omschrijving} onChange={e => setField('omschrijving', e.target.value)} placeholder="Korte beschrijving van het project" style={inputSt}
+                onFocus={e => e.target.style.borderColor=C.blue} onBlur={e => e.target.style.borderColor=C.border}/>
+            </div>
+            <div>
+              <label style={labelSt}>Wensen & doelen</label>
+              <textarea value={form.wens} onChange={e => setField('wens', e.target.value)} rows={4}
+                placeholder="Wat wil je bereiken? Hoe specifieker, hoe beter het AI-advies."
+                style={{ ...inputSt, resize:'vertical', minHeight:80, lineHeight:1.6 }}
+                onFocus={e => e.target.style.borderColor=C.blue} onBlur={e => e.target.style.borderColor=C.border}/>
+            </div>
+          </div>
+        )}
+      </Card>
+
+      {/* ── Voortgang & status kaart ──────────────────────────────────────── */}
+      <Card style={{ padding:'20px 22px' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:16 }}>
+          <Icon name="trendingUp" size={16} color={C.blue}/>
+          <span style={{ fontWeight:700, fontSize:15, color:C.ink }}>Voortgang & status</span>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
+          {/* Voortgang schuifbalk */}
+          <div>
+            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
+              <label style={labelSt}>Voortgang</label>
+              <span style={{ fontSize:13, fontWeight:700, color:statusKleur }}>{form.voortgang}%</span>
+            </div>
+            <input type="range" min={0} max={100} step={5} value={form.voortgang}
+              onChange={e => setField('voortgang', Number(e.target.value))}
+              style={{ width:'100%', accentColor:statusKleur, cursor:'pointer', height:4 }}/>
+            <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color:C.light, marginTop:4 }}>
+              <span>0%</span><span>50%</span><span>100%</span>
+            </div>
+            <div style={{ marginTop:10, background:C.sand, borderRadius:4, height:6, overflow:'hidden' }}>
+              <div style={{ width:`${form.voortgang}%`, height:'100%', background:statusKleur, borderRadius:4, transition:'width .3s' }}/>
+            </div>
+          </div>
+          {/* Status */}
+          <div>
+            <label style={labelSt}>Status</label>
+            <div style={{ display:'flex', flexDirection:'column', gap:7, marginTop:2 }}>
+              {['In voorbereiding','Lopend','Afgerond'].map(s => {
+                const kleur = { 'In voorbereiding':C.gold, 'Lopend':C.ok, 'Afgerond':C.mist }[s]
+                const actief = form.status === s
+                return (
+                  <button key={s} onClick={() => setField('status', s)}
+                    style={{ display:'flex', alignItems:'center', gap:9, padding:'8px 12px', border:`1.5px solid ${actief?kleur:C.border}`, borderRadius:7, background:actief?`${kleur}15`:C.white, cursor:'pointer', fontFamily:'inherit', textAlign:'left', transition:'all .15s' }}>
+                    <div style={{ width:10, height:10, borderRadius:'50%', background:actief?kleur:C.border, flexShrink:0, transition:'background .15s' }}/>
+                    <span style={{ fontSize:13.5, fontWeight:actief?600:400, color:actief?kleur:C.slate }}>{s}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+        {/* Volgende stap */}
+        <div style={{ marginTop:18, paddingTop:16, borderTop:`1px solid ${C.border}` }}>
+          <label style={labelSt}>Volgende stap</label>
+          <div style={{ display:'flex', gap:8, marginTop:2 }}>
+            <input value={form.volgende_stap} onChange={e => setField('volgende_stap', e.target.value)}
+              placeholder="bijv. Offerte aanvragen tegelzetter"
+              style={{ ...inputSt }}
+              onFocus={e => e.target.style.borderColor=C.blue} onBlur={e => e.target.style.borderColor=C.border}/>
+          </div>
+        </div>
+        {/* Opslaan knop onder voortgang */}
+        <div style={{ marginTop:14, display:'flex', justifyContent:'flex-end' }}>
+          <Btn onClick={slaOp} variant="primary" size="sm" style={{ gap:5 }}>
+            <Icon name="check" size={13} color={C.white}/> Wijzigingen opslaan
+          </Btn>
+        </div>
+      </Card>
+
+      {/* ── AI Samenvatting kaart ─────────────────────────────────────────── */}
+      <Card style={{ padding:'20px 22px' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+            <Icon name="activity" size={16} color={C.blue}/>
+            <span style={{ fontWeight:700, fontSize:15, color:C.ink }}>AI projectanalyse</span>
+          </div>
+          <button onClick={() => laadAnalyse(project)} disabled={loadA}
+            style={{ display:'flex', alignItems:'center', gap:5, fontSize:12.5, color:C.mist, background:'none', border:`1px solid ${C.border}`, borderRadius:6, padding:'5px 10px', cursor:'pointer', fontFamily:'inherit', opacity:loadA?.5:1 }}>
+            <Icon name="arrowRight" size={12} color={C.mist}/> Vernieuwen
+          </button>
+        </div>
+        {loadA ? (
+          <div style={{ display:'flex', alignItems:'center', gap:10, padding:'20px 0', color:C.mist }}>
+            <Spinner size={18}/> <span style={{ fontSize:14 }}>AI analyseert jouw project...</span>
+          </div>
+        ) : aiError ? (
+          <div style={{ display:'flex', alignItems:'center', gap:8, padding:'12px 14px', background:C.redSoft, borderRadius:8, fontSize:13.5, color:C.red }}>
+            <Icon name="alertCircle" size={15} color={C.red}/> {aiError}
+          </div>
+        ) : (
+          <RenderMarkdown text={analyse} accentColor={statusKleur}/>
+        )}
+      </Card>
+
+    </div>
+  )
+}
+// ─── EINDE OVERZICHT TAB ──────────────────────────────────────────────────────
+
 // ─── PROJECTEN ────────────────────────────────────────────────────────────────
 function ProjectenModule({ user, projecten, setProjecten, setTab, onNieuwProject }) {
   const [activeProj, setActiveProj] = useState(null)
   const [activeTab, setActiveTab] = useState('overzicht')
   const [editModal, setEditModal] = useState(null)
   const [deleteConfirm, setDeleteConfirm] = useState(null)
-  const [analyse, setAnalyse] = useState('')
-  const [loadA, setLoadA] = useState(false)
   const [chatIn, setChatIn] = useState('')
   const [msgs, setMsgs] = useState([])
   const [loadC, setLoadC] = useState(false)
@@ -609,12 +870,9 @@ function ProjectenModule({ user, projecten, setProjecten, setTab, onNieuwProject
   )
 
   function openProject(p) {
-    setActiveProj(p); setActiveTab('overzicht')
-    setAnalyse(''); setMsgs([])
-    setLoadA(true)
-    const sys = buildSysPrompt(p)
-    callAI(`Analyseer dit bouwproject en geef een overzicht van: **Status & voortgang**, **Belangrijkste aandachtspunten** (asbestverdachte materialen, draagmuren, vergunningen), **Aanbevolen volgorde werkzaamheden**, **Kostenindicatie** (budget/midden/premium), **Volgende concrete stap**. Wees specifiek en praktisch.`, sys)
-      .then(t => { setAnalyse(t); setLoadA(false) })
+    setActiveProj(p)
+    setActiveTab('overzicht')
+    setMsgs([])
   }
 
   function buildSysPrompt(p) {
@@ -710,13 +968,16 @@ function ProjectenModule({ user, projecten, setProjecten, setTab, onNieuwProject
 
         {/* Tab content */}
         {activeTab === 'overzicht' && (
-          <Card style={{ padding:'22px' }}>
-            {loadA ? (
-              <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:12, padding:'36px 0', color:C.mist }}>
-                <Spinner size={28}/><span style={{ fontSize:14 }}>AI analyseert jouw project...</span>
-              </div>
-            ) : <RenderMarkdown text={analyse} accentColor={statusKleur}/>}
-          </Card>
+          <OverzichtTab
+            project={activeProj}
+            statusKleur={statusKleur}
+            onSave={updates => {
+              // Update project in state en sync activeProj
+              const updated = { ...activeProj, ...updates }
+              setProjecten(p => p.map(x => x.id === activeProj.id ? updated : x))
+              setActiveProj(updated)
+            }}
+          />
         )}
 
         {activeTab === 'coach' && (
